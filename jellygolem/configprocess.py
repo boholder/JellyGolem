@@ -13,7 +13,7 @@
 import configparser
 from ast import literal_eval
 
-CONFIG_PATH = '../general-config/'
+CONFIG_PATH = '../config/'
 I18N_PATH = CONFIG_PATH + 'i18n/'
 
 
@@ -53,6 +53,7 @@ def load_section_dict(filename, partname):
     return dict(type_convert(part.items()))
 
 
-GENERAL = load_section_dict('config', 'general')
-ROBOT = load_section_dict('config', 'robot')
+GENERAL = load_section_dict('general-config', 'general')
+ROBOT = load_section_dict('general-config', 'robot')
 LANG_CONFIG = load_i18n_config(GENERAL['language'])
+# use LANG_CONFIG: dict(LANG_CONFIG['a section'])

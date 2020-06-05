@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-@File : emotionwheelenums.py
+@File : emotionwheel.py
 
 @Time : 2020/6/1
 
@@ -13,7 +13,7 @@
 '''
 
 from enum import Enum
-from math import pi, cos, pow
+from math import pi, cos, pow, sin, atan, sqrt
 
 
 class EmotionEnum(Enum):
@@ -24,7 +24,7 @@ class EmotionEnum(Enum):
     value: (radian[float] , radius[float])
     radius range: [0,1]
     '''
-    
+
     ECSTASY = (pi * 0.5, 0.8)
     JOY = (pi * 0.5, 0.5)
     SERENITY = (pi * 0.5, 0.2)
@@ -58,26 +58,57 @@ class EmotionEnum(Enum):
     INTEREST = (pi * 0.75, 0.2)
     OPTIMISM = (pi * 0.625, 0.5)
 
-    @staticmethod
-    def find_closest_label(radian, radius):
-        '''
-        return a EmotionEnum member which closest with input.
-        '''
-        if radian == 0:
-            return EmotionEnum.BROKEN
 
-        result = None
-        # init max value
-        min_distance = 1
+def find_closest_label(radian, radius):
+    '''
+    return a EmotionEnum member which closest with input.
+    '''
 
-        for label in list(EmotionEnum):
-            value = label.value
-            distance = pow(radius, 2) + pow(value[1], 2) - \
-                       2 * radius * value[1] * cos(radian - value[1])
+    check_radius(radius)
 
-            if distance < min_distance:
-                min_distance = distance
-                result = label
+    result = None
+    # init max value
+    min_distance = 1
 
-        return result
+    for label in list(EmotionEnum):
+        value = label.value
+        distance = pow(radius, 2) + pow(value[1], 2) - \
+                   2 * radius * value[1] * cos(radian - value[1])
 
+        if distance < min_distance:
+            min_distance = distance
+            result = label
+
+    return result
+
+
+def clac_muti_emotions_mean(emotionlist):
+    '''
+    Calculate the mean emotion of multiple given emotions.
+    Return an emotion tuple.
+    '''
+
+    meanx = 0
+    meany = 0
+    for (radian, radius) in emotionlist:
+        check_radius(radius)
+        x = radius * cos(radian)
+        y = radius * sin(radian)
+        meanx += x
+        meany += y
+
+    meanx /= len(emotionlist)
+    meany /= len(emotionlist)
+
+    try:
+        return round(sqrt(pow(meanx, 2) + pow(meany, 2)), 6), round(atan(meany / meanx), 4)
+    except ZeroDivisionError:
+        return round(sqrt(pow(meanx, 2) + pow(meany, 2)), 6), 0.0
+
+
+def check_radius(radius):
+    '''
+    Check if radius not more than 1.
+    '''
+    if radius > 1:
+        raise ValueError('Radius more than 1: {}'.format(radius))
