@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='jellygolem',
-    version='0.1.0',
+    version='1.0.0',
     packages=['jellygolem'],
     url='https://github.com/boholder/JellyGolem',
     author='boholder',
@@ -14,6 +14,6 @@ setup(
     classifiers=['Programming Language :: Python :: 3',
                  'License :: OSI Approved :: MIT License',
                  'Intended Audience :: Developers',
-                 'Development Status :: 2 - Pre-Alpha',
-                 'Topic :: Scientific/Engineering']
+                 'Development Status :: 3 - Alpha',
+                 'Topic :: Games/Entertainment']
 )
