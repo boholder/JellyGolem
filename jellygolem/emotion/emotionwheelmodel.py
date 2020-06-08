@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-@File : emotionwheel.py
+@File : emotionwheelmodel.py
 
 @Time : 2020/6/1
 
@@ -9,7 +9,7 @@
 @Function : class EmotionEnum(Enum):
                 Build a polar coordinate system for Robert Plutchik's 'Wheel of
                 Emotions'.
-                Can calculate which label is closest with input.
+            Calculate which label is closest with input.
 '''
 
 from enum import Enum
@@ -73,7 +73,7 @@ def find_closest_label(radian, radius):
     for label in list(EmotionEnum):
         value = label.value
         distance = pow(radius, 2) + pow(value[1], 2) - \
-                   2 * radius * value[1] * cos(radian - value[1])
+                   2 * radius * value[1] * cos(radian - value[0])
 
         if distance < min_distance:
             min_distance = distance
@@ -97,13 +97,16 @@ def clac_muti_emotions_mean(emotionlist):
         meanx += x
         meany += y
 
-    meanx /= len(emotionlist)
-    meany /= len(emotionlist)
+    meanradius = round(sqrt(pow(meanx, 2) + pow(meany, 2)), 6)
 
     try:
-        return round(sqrt(pow(meanx, 2) + pow(meany, 2)), 6), round(atan(meany / meanx), 4)
+        meanradian = round(atan(meany / meanx), 6)
+        check_radius(meanradius)
+        return meanradian, meanradius
     except ZeroDivisionError:
-        return round(sqrt(pow(meanx, 2) + pow(meany, 2)), 6), 0.0
+        return meanradian, 0.0
+    except ValueError:
+        return meanradian, 1.0
 
 
 def check_radius(radius):
@@ -112,3 +115,30 @@ def check_radius(radius):
     '''
     if radius > 1:
         raise ValueError('Radius more than 1: {}'.format(radius))
+
+
+def is_negative_emotion(emotion):
+    '''
+    This is a negative emotion,
+    if the radian not close to anticipation, joy or trust.
+    '''
+    if emotion[0] < 0.125 * pi or emotion[0] > 0.75 * pi:
+        return True
+    else:
+        return False
+
+
+def clac_paint_position(radian, radius):
+    '''
+    Calculate current emotion's position on /resource/emotion-wheel.png
+    Wheel picture size: 650*650
+    Heart picture size: 16*16
+    '''
+    # Picture parts' widths are not equal
+    if radius > 0.35:
+        length = (radius - 0.35) * 210.0 + 125.0
+    else:
+        length = radius * 357.0
+
+    # 325-8=317 pix for wheel.png center is (325,325), heart.png size is 16*16
+    return 317.0 + length * cos(radian), 317.0 - length * sin(radian)

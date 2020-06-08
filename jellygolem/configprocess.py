@@ -14,7 +14,8 @@ import configparser
 from ast import literal_eval
 
 CONFIG_PATH = '../config/'
-I18N_PATH = CONFIG_PATH + 'i18n/'
+I18N_CONFIG_PATH = CONFIG_PATH + 'i18n/'
+ROBOT_CONFIG_PATH = CONFIG_PATH + 'robot/'
 
 
 def load_config(filename):
@@ -25,7 +26,13 @@ def load_config(filename):
 
 def load_i18n_config(langname):
     parser = configparser.ConfigParser()
-    parser.read(I18N_PATH + langname + '.ini')
+    parser.read(I18N_CONFIG_PATH + langname + '.ini')
+    return parser
+
+
+def load_robot_config(robotname):
+    parser = configparser.ConfigParser()
+    parser.read(ROBOT_CONFIG_PATH + robotname + '/robot-config.ini')
     return parser
 
 
@@ -48,12 +55,11 @@ def type_convert(items):
     return result
 
 
-def load_section_dict(filename, partname):
-    part = load_config(filename)[partname]
+def load_section_dict(configparser, partname):
+    part = configparser[partname]
     return dict(type_convert(part.items()))
 
 
-GENERAL = load_section_dict('general-config', 'general')
-ROBOT = load_section_dict('general-config', 'robot')
-LANG_CONFIG = load_i18n_config(GENERAL['language'])
-# use LANG_CONFIG: dict(LANG_CONFIG['a section'])
+GENERAL = load_section_dict(load_config('general-config'), 'general')
+ROBOT = load_section_dict(load_robot_config(GENERAL['robot']), 'robot')
+LANG_CONFIG_PARSER = load_i18n_config(GENERAL['language'])

@@ -9,7 +9,7 @@ setup(
     url='https://github.com/boholder/JellyGolem',
     author='boholder',
     author_email='boholder@anche.no',
-    description='A human model within an memorable Robert Plutchik\'s '
+    description='A human emotion within an memorable Robert Plutchik\'s '
                 'emotions wheel.',
     classifiers=['Programming Language :: Python :: 3',
                  'License :: OSI Approved :: MIT License',
