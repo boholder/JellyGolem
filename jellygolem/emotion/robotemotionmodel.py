@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 '''
-@File : robotemotionprocess.py
+@File : robotemotionmodel.py
 
 @Time : 2020/6/5
 
 @Author : Boholder
 
-@Function : Process event, change robot's emotion, output robot's display emotion.
+@Function : Process emotion, change robot's emotion, output robot's display emotion.
                             +--------------------------+
             +----------+    | inner emotion memory     |
-            |  event   ++   |   +-------------------+  |
+            |  emotion   ++   |   +-------------------+  |
             +----+------------->+ change inner emotion |
                  |          |   | for next loop     |  |
                  |          |   |                   |  |
@@ -28,7 +28,7 @@ import datetime
 from math import pow, log, ceil
 
 import jellygolem.configprocess as config
-import jellygolem.emotion.emotionwheelmodel as wheel
+import jellygolem.emotion.emotionwheelprocess as wheel
 
 
 class EmotionProcessor:
@@ -58,7 +58,7 @@ class EmotionProcessor:
         return self._favorability
 
     @emotion.setter
-    def emotion(self, emotion):
+    def emotion(self, emotion: tuple):
         '''
         This method is only for debugging.
         '''
@@ -66,7 +66,7 @@ class EmotionProcessor:
         self._emotion = emotion
 
     @favorability.setter
-    def favorability(self, favorability):
+    def favorability(self, favorability: int):
         '''
         This method is only for debugging.
         '''
@@ -90,37 +90,36 @@ class EmotionProcessor:
         decreased = self.emotion[1] * 1.84 / (1.84 + pow(log(t, 10), 1.25))
         self.emotion = (self.emotion[0], decreased)
 
-    def receive_event(self, event):
+    def receive_emotion(self, emotion: tuple):
         '''
-        Event is just a emotion tuple.
-        Why bother design another event-react-emotion mapping,
-        just label an event with the human's expect response about it.
+        Why bother design another emotion-react-emotion mapping,
+        just label an emotion with the human's expect response about it.
 
         Return displayed emotion tuple.
         '''
 
         # favorability reduce the impact of negative events on robot's emotions
         # full favorability(=500) will reduce 50% impact
-        if wheel.is_negative_emotion(event):
-            reduced = event[1] * (1 - self.favorability / 1000)
-            event = (event[0], reduced)
+        if wheel.is_negative_emotion(emotion):
+            reduced = emotion[1] * (1 - self.favorability / 1000)
+            emotion = (emotion[0], reduced)
 
-            # event changes favorability
+            # emotion changes favorability
             self.favorability -= ceil(reduced / 0.7)
         else:
-            self.favorability += ceil(event[1] / 0.7)
+            self.favorability += ceil(emotion[1] / 0.7)
 
         # emotion intensity decrease
         self.emotion_decrease()
         old_emotion = self.emotion
 
-        # event change inner emotion
-        self.emotion = wheel.clac_muti_emotions_mean([event * self.iescale, old_emotion])
+        # emotion change inner emotion
+        self.emotion = wheel.clac_muti_emotions_mean([emotion * self.iescale, old_emotion])
 
         # displayed emotion = immediate emotion+ internal emotion
         return wheel.clac_muti_emotions_mean(
-            [event * self.rescale, old_emotion * (1 - self.rescale)])
+            [emotion * self.rescale, old_emotion * (1 - self.rescale)])
 
 
-EmotionProcessor = EmotionProcessor((0.5 * 3.14, 1), config.ROBOT['favorability'],
-                                    config.ROBOT['i-e-scale'], config.ROBOT['r-e-scale'])
+EmotionProcessor = EmotionProcessor((0.5 * 3.14, 1), config.ROBOT_DICT['favorability'],
+                                    config.ROBOT_DICT['i-e-scale'], config.ROBOT_DICT['r-e-scale'])

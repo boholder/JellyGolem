@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-@File : emotionwheelmodel.py
+@File : emotionwheelprocess.py
 
 @Time : 2020/6/1
 
@@ -25,6 +25,7 @@ class EmotionEnum(Enum):
     radius range: [0,1]
     '''
 
+    BLANK = (0, 0)
     ECSTASY = (pi * 0.5, 0.8)
     JOY = (pi * 0.5, 0.5)
     SERENITY = (pi * 0.5, 0.2)
@@ -59,12 +60,15 @@ class EmotionEnum(Enum):
     OPTIMISM = (pi * 0.625, 0.5)
 
 
-def find_closest_label(radian, radius):
+def find_closest_label(radian: float, radius: float):
     '''
     return a EmotionEnum member which closest with input.
     '''
 
     check_radius(radius)
+
+    if radian == 0 and radius == 0:
+        return EmotionEnum.BLANK
 
     result = None
     # init max value
@@ -82,7 +86,7 @@ def find_closest_label(radian, radius):
     return result
 
 
-def clac_muti_emotions_mean(emotionlist):
+def clac_muti_emotions_mean(emotionlist: list):
     '''
     Calculate the mean emotion of multiple given emotions.
     Return an emotion tuple.
@@ -109,7 +113,7 @@ def clac_muti_emotions_mean(emotionlist):
         return meanradian, 1.0
 
 
-def check_radius(radius):
+def check_radius(radius: float):
     '''
     Check if radius not more than 1.
     '''
@@ -117,7 +121,7 @@ def check_radius(radius):
         raise ValueError('Radius more than 1: {}'.format(radius))
 
 
-def is_negative_emotion(emotion):
+def is_negative_emotion(emotion: tuple):
     '''
     This is a negative emotion,
     if the radian not close to anticipation, joy or trust.
@@ -128,12 +132,14 @@ def is_negative_emotion(emotion):
         return False
 
 
-def clac_paint_position(radian, radius):
+def clac_paint_position(radian: float, radius: float):
     '''
     Calculate current emotion's position on /resource/emotion-wheel.png
     Wheel picture size: 650*650
     Heart picture size: 16*16
     '''
+
+    check_radius(radius)
     # Picture parts' widths are not equal
     if radius > 0.35:
         length = (radius - 0.35) * 210.0 + 125.0

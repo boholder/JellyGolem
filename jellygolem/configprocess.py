@@ -11,28 +11,31 @@
 '''
 
 import configparser
-from ast import literal_eval
+import os
 
-CONFIG_PATH = '../config/'
-I18N_CONFIG_PATH = CONFIG_PATH + 'i18n/'
-ROBOT_CONFIG_PATH = CONFIG_PATH + 'robot/'
+_CONFIG_PATH = 'config/'
+_I18N_CONFIG_PATH = _CONFIG_PATH + 'i18n/'
+_ROBOT_CONFIG_PATH = 'robot/'
 
 
 def load_config(filename):
     parser = configparser.ConfigParser()
-    parser.read(CONFIG_PATH + filename + '.ini')
+    parser.read(os.path.join(os.path.dirname(__file__),
+                             _CONFIG_PATH) + filename + '.ini')
     return parser
 
 
 def load_i18n_config(langname):
     parser = configparser.ConfigParser()
-    parser.read(I18N_CONFIG_PATH + langname + '.ini')
+    parser.read(os.path.join(os.path.dirname(__file__),
+                             _I18N_CONFIG_PATH) + langname + '.ini')
     return parser
 
 
 def load_robot_config(robotname):
     parser = configparser.ConfigParser()
-    parser.read(ROBOT_CONFIG_PATH + robotname + '/robot-config.ini')
+    parser.read(os.path.join(os.path.dirname(__file__),
+                             _ROBOT_CONFIG_PATH) + robotname + '/robot-config.ini')
     return parser
 
 
@@ -55,11 +58,16 @@ def type_convert(items):
     return result
 
 
-def load_section_dict(configparser, partname):
-    part = configparser[partname]
+def load_section_dict(parser, partname):
+    part = parser[partname]
     return dict(type_convert(part.items()))
 
 
-GENERAL = load_section_dict(load_config('general-config'), 'general')
-ROBOT = load_section_dict(load_robot_config(GENERAL['robot']), 'robot')
-LANG_CONFIG_PARSER = load_i18n_config(GENERAL['language'])
+GENERAL_DICT = load_section_dict(load_config('general-config'), 'general')
+ROBOT_DICT = load_section_dict(load_robot_config(GENERAL_DICT['robot']), 'robot')
+LANG_CONFIG_PARSER = load_i18n_config(GENERAL_DICT['language'])
+
+ROBOT_PKG_PATH = os.path.join(os.path.dirname(__file__),
+                              _ROBOT_CONFIG_PATH) + GENERAL_DICT['robot']
+
+UI_CONFIG = dict(LANG_CONFIG_PARSER['ui'])

@@ -19,28 +19,29 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QLabel,
                              QSlider, QVBoxLayout, QWidget,
                              QDoubleSpinBox, QLayout)
-import jellygolem.emotion.emotionwheelmodel as wheelmodel
+import jellygolem.emotion.emotionwheelprocess as emotionproc
 
-RESOURCE_PATH = '../../resource/'
-WHEEL_PIC_PATH = RESOURCE_PATH + 'emotion-wheel.png'
-HEART_PIC_PATH = RESOURCE_PATH + 'heart.png'
+_RESOURCE_PATH = '../resource/'
+_WHEEL_PIC_PATH = _RESOURCE_PATH + 'emotion-wheel.png'
+_HEART_PIC_PATH = _RESOURCE_PATH + 'heart.png'
 
 
 class WheelPaintWidget(QWidget):
     value_changed_signal = pyqtSignal(float)
 
-    def __init__(self, emotion, *args,
+    def __init__(self, emotion: tuple, *args,
                  **kwargs):
         super(WheelPaintWidget, self).__init__(*args, **kwargs)
 
         self.emotion = emotion
-        self.wheel_pixmap = QPixmap(WHEEL_PIC_PATH)
-        self.heart_pixmap = QPixmap(HEART_PIC_PATH)
+        self.wheel_pixmap = QPixmap(_WHEEL_PIC_PATH)
+        self.heart_pixmap = QPixmap(_HEART_PIC_PATH)
+        self.setMinimumSize(self.wheel_pixmap.size())
 
     def paintEvent(self, event: QtGui.QPaintEvent):
         super(WheelPaintWidget, self).paintEvent(event)
         self.setGeometry(self.geometry().x(), self.geometry().y(), 650, 650)
-        (x, y) = wheelmodel.clac_paint_position(*self.emotion)
+        (x, y) = emotionproc.clac_paint_position(*self.emotion)
         painter = QPainter(self)
         painter.drawPixmap(self.rect(), self.wheel_pixmap)
         painter.drawPixmap(x, y, 16, 16, self.heart_pixmap)
@@ -48,6 +49,6 @@ class WheelPaintWidget(QWidget):
 
 if __name__ == '__main__':
     app = QApplication([])
-    ex = WheelPaintWidget((0, 0.2))
+    ex = WheelPaintWidget((0, 0))
     ex.show()
     sys.exit(app.exec_())
