@@ -18,8 +18,8 @@ from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QGridLayout, QFrame,
                              QVBoxLayout, QHBoxLayout)
 
 import jellygolem.configprocess as config
-from jellygolem.emotion.emotionwheelprocess import EmotionEnum
-import jellygolem.emotion.emotionreactiondriver as driver
+from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
+import jellygolem.jg_emotion.emotionreactiondriver as driver
 
 
 class DialogsWidget(QWidget):

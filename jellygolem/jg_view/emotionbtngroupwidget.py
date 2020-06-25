@@ -13,12 +13,12 @@
 '''
 
 import sys
-
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (QApplication, QGroupBox,
                              QGridLayout, QPushButton, QButtonGroup, QLayout)
 
 import jellygolem.configprocess as config
-from jellygolem.emotion.emotionwheelprocess import EmotionEnum
+from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
 
 
 class EmotionButtonWidget(QPushButton):
@@ -26,12 +26,12 @@ class EmotionButtonWidget(QPushButton):
     def __init__(self, emotion: EmotionEnum, *args,
                  **kwargs):
         super(EmotionButtonWidget, self).__init__(*args, **kwargs)
-
         self.emotion = emotion
         self.setText(config.LANG_CONFIG_PARSER['emotion words'][self.emotion.name])
 
 
 class EmotionButtonGroupWidget(QGroupBox):
+    emotion_signal = pyqtSignal(EmotionEnum)
 
     def __init__(self, *args,
                  **kwargs):
@@ -42,7 +42,12 @@ class EmotionButtonGroupWidget(QGroupBox):
         col = 0
         row = 0
         for name, member in EmotionEnum.__members__.items():
+
+            # not make BLANK button, it causes error
+            if name == 'BLANK':
+                continue
             button = EmotionButtonWidget(member)
+            button.clicked.connect(self.on_button_clicked)
             self.buttongroup.addButton(button, col)
             # 0,1,2
             # 3,
@@ -58,6 +63,9 @@ class EmotionButtonGroupWidget(QGroupBox):
 
         main_layout.setSizeConstraint(QLayout.SetFixedSize)
         self.setLayout(main_layout)
+
+    def on_button_clicked(self):
+        self.emotion_signal.emit(self.sender().emotion)
 
 
 if __name__ == '__main__':

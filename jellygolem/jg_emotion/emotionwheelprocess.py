@@ -13,7 +13,7 @@
 '''
 
 from enum import Enum
-from math import pi, cos, pow, sin, atan, sqrt
+from math import pi, cos, pow, sin, atan2, sqrt
 
 
 class EmotionEnum(Enum):
@@ -30,30 +30,30 @@ class EmotionEnum(Enum):
     JOY = (pi * 0.5, 0.5)
     SERENITY = (pi * 0.5, 0.2)
     LOVE = (pi * 0.375, 0.5)
-    ADMIRATION = (pi * 0.85, 0.8)
-    TRUST = (pi * 0.85, 0.5)
-    ACCEPTANCE = (pi * 0.85, 0.2)
-    SUBMISSION = (pi * 0.225, 0.5)
+    ADMIRATION = (pi * 0.25, 0.8)
+    TRUST = (pi * 0.25, 0.5)
+    ACCEPTANCE = (pi * 0.25, 0.2)
+    SUBMISSION = (pi * 0.125, 0.5)
     TERROR = (pi * 0.0, 0.8)
     FEAR = (pi * 0.0, 0.5)
     APPREHENSION = (pi * 0.0, 0.2)
-    AWE = (pi * 1.875, 0.5)
-    AMAZEMENT = (pi * 1.75, 0.8)
-    SURPRISE = (pi * 1.75, 0.5)
-    DISTRACTION = (pi * 1.75, 0.2)
-    DISAPPROVAL = (pi * 1.625, 0.5)
-    GRIEF = (pi * 1.5, 0.8)
-    SADNESS = (pi * 1.5, 0.5)
-    PENSIVENESS = (pi * 1.5, 0.2)
-    REMORSE = (pi * 1.375, 0.5)
-    LOATHING = (pi * 1.25, 0.8)
-    DISGUST = (pi * 1.25, 0.5)
-    BOREDOM = (pi * 1.25, 0.2)
-    CONTEMPT = (pi * 1.125, 0.5)
+    AWE = (pi * -0.125, 0.5)
+    AMAZEMENT = (pi * -0.25, 0.8)
+    SURPRISE = (pi * -0.25, 0.5)
+    DISTRACTION = (pi * -0.25, 0.2)
+    DISAPPROVAL = (pi * -0.375, 0.5)
+    GRIEF = (pi * -0.5, 0.8)
+    SADNESS = (pi * -0.5, 0.5)
+    PENSIVENESS = (pi * -0.5, 0.2)
+    REMORSE = (pi * -0.625, 0.5)
+    LOATHING = (pi * -0.75, 0.8)
+    DISGUST = (pi * -0.75, 0.5)
+    BOREDOM = (pi * -0.75, 0.2)
+    CONTEMPT = (pi * -0.875, 0.5)
     RAGE = (pi * 1.0, 0.8)
     ANGER = (pi * 1.0, 0.5)
     ANNOYANCE = (pi * 1.0, 0.2)
-    AGGRESSIVENESS = (pi * 0.275, 0.5)
+    AGGRESSIVENESS = (pi * 0.875, 0.5)
     VIGILANCE = (pi * 0.75, 0.8)
     ANTICIPATION = (pi * 0.75, 0.5)
     INTEREST = (pi * 0.75, 0.2)
@@ -76,8 +76,8 @@ def find_closest_label(radian: float, radius: float):
 
     for label in list(EmotionEnum):
         value = label.value
-        distance = pow(radius, 2) + pow(value[1], 2) - \
-                   2 * radius * value[1] * cos(radian - value[0])
+        distance = radius ** 2 + value[1] ** 2 \
+                   - 2 * radius * value[1] * cos(radian - value[0])
 
         if distance < min_distance:
             min_distance = distance
@@ -86,25 +86,25 @@ def find_closest_label(radian: float, radius: float):
     return result
 
 
-def clac_muti_emotions_mean(emotionlist: list):
+def calc_muti_emotions_mean(emotionlist: list):
     '''
     Calculate the mean emotion of multiple given emotions.
     Return an emotion tuple.
     '''
 
-    meanx = 0
-    meany = 0
+    x = 0
+    y = 0
     for (radian, radius) in emotionlist:
         check_radius(radius)
-        x = radius * cos(radian)
-        y = radius * sin(radian)
-        meanx += x
-        meany += y
+        x += radius * cos(radian)
+        y += radius * sin(radian)
 
-    meanradius = round(sqrt(pow(meanx, 2) + pow(meany, 2)), 6)
+    x /= len(emotionlist)
+    y /= len(emotionlist)
 
     try:
-        meanradian = round(atan(meany / meanx), 6)
+        meanradius = round(sqrt(x ** 2 + y ** 2), 6)
+        meanradian = round(atan2(y, x), 6)
         check_radius(meanradius)
         return meanradian, meanradius
     except ZeroDivisionError:
@@ -132,14 +132,18 @@ def is_negative_emotion(emotion: tuple):
         return False
 
 
-def clac_paint_position(radian: float, radius: float):
+def calc_paint_position(radian: float, radius: float):
     '''
     Calculate current emotion's position on /resource/emotion-wheel.png
     Wheel picture size: 650*650
     Heart picture size: 16*16
     '''
 
-    check_radius(radius)
+    # On wheel in picture, more smaller the radius, more stronger the emotion.
+    # But in EmotionEnum, bigger value means stronger emotion.
+    # So we just flip radius value to suit the picture.
+    radius = 1.0 - radius
+
     # Picture parts' widths are not equal
     if radius > 0.35:
         length = (radius - 0.35) * 210.0 + 125.0

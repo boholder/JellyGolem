@@ -17,7 +17,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QGridLayout, QLayout)
 
 import jellygolem.configprocess as config
-import jellygolem.emotion.emotionwheelprocess as emotionproc
+import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
 
 
 class RobotStateWidget(QWidget):

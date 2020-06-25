@@ -7,12 +7,12 @@
 @Author : Boholder
 
 @Function : A driver for simulating event happening & robot's reaction.
-            Will be replaced by event system.
+            Will be replaced by event-driving conversation system.
 
 '''
 
 import jellygolem.configprocess as config
-from jellygolem.emotion.emotionwheelprocess import EmotionEnum
+from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
 
 
 def get_event_by_emotion(emotion: EmotionEnum):
