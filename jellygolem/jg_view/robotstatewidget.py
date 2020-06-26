@@ -14,7 +14,7 @@
 import sys
 
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QGridLayout, QLayout)
+from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QGridLayout, QLayout, QFrame)
 
 import jellygolem.configprocess as config
 import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
@@ -25,38 +25,55 @@ class RobotStateWidget(QWidget):
     def __init__(self, name: str, favorability: int, emotion: tuple, *args, **kwargs):
         super(RobotStateWidget, self).__init__(*args, **kwargs)
 
-        # init properties
+        # init variables
         self.name = name
         self.favorability = favorability
         self.emotion = emotion
+        self.emotion_name = emotionproc.find_closest_label(*self.emotion)
 
-        # make labels
+        # make changeable labels
+        self.favor_value_label = QLabel(str(self.favorability))
+        self.favor_value_label.setFrameShape(QFrame.Box)
+        self.emotionlab_value_label = QLabel(
+            config.LANG_CONFIG_PARSER['emotion words'][self.emotion_name.name])
+        self.emotionlab_value_label.setFrameShape(QFrame.Box)
+        self.emotionval_value_label = QLabel(str(self.emotion))
+        self.emotionval_value_label.setFrameShape(QFrame.Box)
+
+        # make static labels
         name_label = QLabel(config.UI_CONFIG['robot-name'] + ': ')
         name_value_label = QLabel(self.name)
-
+        name_value_label.setFrameShape(QFrame.Box)
         favor_label = QLabel(config.UI_CONFIG['robot-favorability'] + ': ')
-        favor_value_label = QLabel(str(self.favorability))
-
         emotionlab_label = QLabel(config.UI_CONFIG['robot-emotion-label'] + ': ')
-        emotion_enum = emotionproc.find_closest_label(*self.emotion)
-        emotionlab_value_label = QLabel(
-            config.LANG_CONFIG_PARSER['emotion words'][emotion_enum.name])
-
         emotionval_label = QLabel(config.UI_CONFIG['robot-emotion-value'] + ': ')
-        emotionval_value_label = QLabel(str(self.emotion))
 
         # add label into layout
         layout = QGridLayout()
         layout.addWidget(name_label, 0, 0)
         layout.addWidget(name_value_label, 0, 1)
         layout.addWidget(favor_label, 1, 0)
-        layout.addWidget(favor_value_label, 1, 1)
+        layout.addWidget(self.favor_value_label, 1, 1)
         layout.addWidget(emotionlab_label, 2, 0)
-        layout.addWidget(emotionlab_value_label, 2, 1)
+        layout.addWidget(self.emotionlab_value_label, 2, 1)
         layout.addWidget(emotionval_label, 3, 0)
-        layout.addWidget(emotionval_value_label, 3, 1)
+        layout.addWidget(self.emotionval_value_label, 3, 1)
         layout.setSizeConstraint(QLayout.SetFixedSize)
         self.setLayout(layout)
+
+    def update_value(self, favor: int, emotion: tuple):
+        # change class vars
+        self.favorability = favor
+        self.emotion = emotion
+        self.emotion_name = emotionproc.find_closest_label(*self.emotion)
+
+        # change labels text
+        self.favor_value_label.setText(str(favor))
+        self.emotionlab_value_label.setText(
+            config.LANG_CONFIG_PARSER['emotion words'][self.emotion_name.name])
+        self.emotionval_value_label.setText(str(emotion))
+
+        self.repaint()
 
 
 if __name__ == '__main__':

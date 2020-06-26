@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-@File : testemotionwindow.py
+@File : emotiontestwindow.py
 
 @Time : 2020/6/8
 
@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import (QApplication, QDialog, QHBoxLayout, QLabel,
                              QDoubleSpinBox, QLayout, QComboBox, QGroupBox,
                              QGridLayout, QSizePolicy)
 
+from jellygolem.jg_conversation.messagemodel import MsgPairModel, MsgModel
 from jellygolem.jg_view.emotionbtngroupwidget import EmotionButtonGroupWidget
 from jellygolem.jg_view.robotstatewidget import RobotStateWidget
 from jellygolem.jg_view.wheelpaintwidget import WheelPaintWidget
@@ -27,7 +28,7 @@ import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
 from jellygolem.jg_emotion.robotemotionmodel import RobotEmotionData
 from jellygolem.jg_emotion.robotemotionmodel import RobotEmotionModel
 from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
-import jellygolem.jg_emotion.emotionreactiondriver as driver
+import jellygolem.jg_emotion.emotionreactionstub as stub
 
 
 class MainWindow(QDialog):
@@ -42,10 +43,7 @@ class MainWindow(QDialog):
         self.btngroup = EmotionButtonGroupWidget()
         self.robotstate = RobotStateWidget(name, initdata.favorability, initdata.emotion)
         self.wheel = WheelPaintWidget(initdata.emotion)
-        self.dialogs = DialogsWidget(EmotionEnum.BLANK,
-                                     driver.get_event_by_emotion(EmotionEnum.BLANK),
-                                     EmotionEnum.BLANK,
-                                     driver.get_reaction_by_emotion(EmotionEnum.BLANK))
+        self.dialogs = DialogsWidget()
 
         # init an emotion model to store emotion
         self.processor = emotionmodel
@@ -68,17 +66,25 @@ class MainWindow(QDialog):
         self.setLayout(layout)
         self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
 
-    def get_emotion_signal(self, emotion: EmotionEnum):
+    def get_emotion_signal(self, event_emotion: EmotionEnum):
         try:
-            # send signal to widgets
-            displayed_emotion = self.processor.receive_emotion(emotion.value)
+            displayed_emotion = self.processor.receive_emotion(event_emotion.value)
             internal_emotion = self.processor.emotion
-            self.wheel.repaint_wheel(internal_emotion)
+            favorability = self.processor.favorability
 
-            # loglike
-            print("robot receive: " + str(emotion) + str(emotion.value))
-            print("robot display: " + str(displayed_emotion))
-            print("robot internal: " + str(internal_emotion))
+            # trigger widgets update methods
+            self.wheel.repaint_wheel(internal_emotion)
+            self.robotstate.update_value(favorability, internal_emotion)
+            new_msgpair = MsgPairModel(
+                MsgModel(event_emotion.value, stub.get_event_by_emotion(event_emotion)),
+                MsgModel(displayed_emotion, stub.get_reaction_by_emotion(
+                    emotionproc.find_closest_label(*displayed_emotion))))
+            self.dialogs.update_value(new_msgpair)
+
+            # # loglike
+            # print("robot receive: " + str(emotion) + str(emotion.value))
+            # print("robot display: " + str(displayed_emotion))
+            # print("robot internal: " + str(internal_emotion))
 
         except Exception as e:
             raise e
@@ -92,5 +98,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyle('Fusion')
     window = MainWindow()
+    window.setWindowTitle('EmotionProcessTest')
     window.show()
     sys.exit(app.exec_())

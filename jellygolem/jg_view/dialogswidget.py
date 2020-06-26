@@ -19,51 +19,77 @@ from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QGridLayout, QFrame,
 
 import jellygolem.configprocess as config
 from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
-import jellygolem.jg_emotion.emotionreactiondriver as driver
+from jellygolem.jg_conversation.messagemodel import MsgPairModel
+import jellygolem.jg_emotion.emotionreactionstub as driver
 
 
 class DialogsWidget(QWidget):
 
-    def __init__(self, event_emotion: EmotionEnum, event_info: str, react_emotion: EmotionEnum,
-                 react_info: str, *args, **kwargs):
+    def __init__(self, msgpair: MsgPairModel = MsgPairModel(), *args, **kwargs):
         super(DialogsWidget, self).__init__(*args, **kwargs)
 
-        # init properties
-        self.event_emotion = event_emotion
-        self.event_info = event_info
-        self.react_emotion = react_emotion
-        self.react_info = react_info
+        # init variable
+        self.msgpair = msgpair
+        self.event = self.msgpair.event
+        self.reaction = self.msgpair.reaction
 
         # make widgets
-        input_emotion_label = QLabel(config.UI_CONFIG['input-emotion-label'] + ': ')
-        output_emotion_label = QLabel(config.UI_CONFIG['output-emotion-label'] + ': ')
+        input_emotion_label = QLabel(config.UI_CONFIG['event-emotion'] + ': ')
+        output_emotion_label = QLabel(config.UI_CONFIG['reaction-emotion'] + ': ')
         description_label1 = QLabel(config.UI_CONFIG['description'] + ': ')
         description_label2 = QLabel(config.UI_CONFIG['description'] + ': ')
 
-        input_emotion_value_label = QLabel(
-            config.LANG_CONFIG_PARSER['emotion words'][self.event_emotion.name])
-        input_emotion_value_label.setFrameShape(QFrame.Box)
+        self.input_emotion_name_label = QLabel(
+            config.LANG_CONFIG_PARSER['emotion words'][
+                self.msgpair.event.emotion_label.name])
+        self.input_emotion_name_label.setFrameShape(QFrame.Box)
+        self.input_emotion_value_label = QLabel(str(self.event.emotion_value))
+        self.input_emotion_value_label.setFrameShape(QFrame.Box)
 
-        output_emotion_value_label = QLabel(
-            config.LANG_CONFIG_PARSER['emotion words'][self.react_emotion.name])
-        output_emotion_value_label.setFrameShape(QFrame.Box)
+        self.output_emotion_name_label = QLabel(
+            config.LANG_CONFIG_PARSER['emotion words'][
+                self.reaction.emotion_label.name])
+        self.output_emotion_name_label.setFrameShape(QFrame.Box)
+        self.output_emotion_value_label = QLabel(str(self.reaction.emotion_value))
+        self.output_emotion_value_label.setFrameShape(QFrame.Box)
 
-        input_description = QLabel(self.event_info)
-        input_description.setFrameShape(QFrame.Box)
-        output_description = QLabel('"' + self.react_info + '"')
-        output_description.setFrameStyle(QFrame.Box)
+        self.input_description = QLabel(self.event.message)
+        self.input_description.setFrameShape(QFrame.Box)
+        self.output_description = QLabel('"' + self.reaction.message + '"')
+        self.output_description.setFrameShape(QFrame.Box)
 
         layout = QGridLayout()
         layout.addWidget(input_emotion_label, 0, 0)
-        layout.addWidget(input_emotion_value_label, 0, 1)
-        layout.addWidget(description_label1, 0, 2)
-        layout.addWidget(input_description, 0, 3)
+        layout.addWidget(self.input_emotion_name_label, 0, 1)
+        layout.addWidget(self.input_emotion_value_label, 0, 2)
+        layout.addWidget(description_label1, 0, 3)
+        layout.addWidget(self.input_description, 0, 4)
         layout.addWidget(output_emotion_label, 1, 0)
-        layout.addWidget(output_emotion_value_label, 1, 1)
-        layout.addWidget(description_label2, 1, 2)
-        layout.addWidget(output_description, 1, 3)
+        layout.addWidget(self.output_emotion_name_label, 1, 1)
+        layout.addWidget(self.output_emotion_value_label, 1, 2)
+        layout.addWidget(description_label2, 1, 3)
+        layout.addWidget(self.output_description, 1, 4)
         layout.setSizeConstraint(QLayout.SetFixedSize)
         self.setLayout(layout)
+
+    def update_value(self, msgpair: MsgPairModel):
+        self.msgpair = msgpair
+        self.event = self.msgpair.event
+        self.reaction = self.msgpair.reaction
+
+        self.input_emotion_name_label.setText(
+            config.LANG_CONFIG_PARSER['emotion words'][
+                self.event.emotion_label.name])
+
+        self.output_emotion_name_label.setText(
+            config.LANG_CONFIG_PARSER['emotion words'][
+                self.reaction.emotion_label.name])
+
+        self.input_emotion_value_label.setText(str(self.event.emotion_value))
+        self.output_emotion_value_label.setText(str(self.reaction.emotion_value))
+        self.input_description.setText(self.event.message)
+        self.output_description.setText('"' + self.reaction.message + '"')
+        self.repaint()
 
 
 if __name__ == '__main__':
@@ -72,7 +98,6 @@ if __name__ == '__main__':
     font = QFont()
     # font.setPixelSize(18)
     app.setFont(font)
-    window = DialogsWidget(EmotionEnum.JOY, driver.get_event_by_emotion(EmotionEnum.JOY),
-                           EmotionEnum.JOY, driver.get_reaction_by_emotion(EmotionEnum.JOY))
+    window = DialogsWidget()
     window.show()
     sys.exit(app.exec_())

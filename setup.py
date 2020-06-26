@@ -4,16 +4,15 @@ from setuptools import setup
 
 setup(
     name='jellygolem',
-    version='1.0.0',
+    version='0.1.0',
     packages=['jellygolem'],
     url='https://github.com/boholder/JellyGolem',
     author='boholder',
     author_email='boholder@anche.no',
-    description='A human emotion within an memorable Robert Plutchik\'s '
-                'emotions wheel.',
+    description='A bot with emotional simulation that can chat with.',
     classifiers=['Programming Language :: Python :: 3',
                  'License :: OSI Approved :: MIT License',
-                 'Intended Audience :: Developers',
-                 'Development Status :: 3 - Alpha',
+                 'Intended Audience :: Other Audience',
+                 'Development Status :: 2 - Pre-Alpha',
                  'Topic :: Games/Entertainment']
 )
