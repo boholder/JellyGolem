@@ -1,4 +1,4 @@
-# ![jg-icon]() Jelly Golem 
+# ![jg-icon](/jellygolem/resource/icon/Icon-64.png) Jelly Golem 
 
 ~~A chat bot with simulated emotionally oriented responses.~~
 
@@ -12,10 +12,10 @@ And I also wrote a GUI to show how this part works.
 
 ## Brief intro (to design ideas)
 
-The aim of this project is to implement a set of "Ghost" side functions (interaction system)
+The aim of this project is to implement a set of "Ghost" side functions (interaction system),
  to the existing "Ukagaka"(desktop partner) "Shell" side projects
  (mostly written in JavaScript, TypeScript, taking advantage of the front-end language 
- with rich and flexible animation but less interactive)
+ with rich and flexible animation)
  ([search results on github](https://github.com/search?q=Ukagaka&type=Repositories)).
 
 The core function of this project is the implementation of an "event-driven conversation function".
@@ -43,7 +43,7 @@ This project still counts as an entertaining game
 
 ## Preview
 
-![emotion-processing-test]()
+![emotion-processing-test](/doc/screenshot/emotion-test-screenshot.jpg)
 
 1. emotion processing test screenshot
 
