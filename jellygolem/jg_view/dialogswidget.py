@@ -14,13 +14,10 @@
 import sys
 
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QGridLayout, QFrame, QLayout,
-                             QVBoxLayout, QHBoxLayout)
+from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QGridLayout, QFrame, QLayout)
 
 import jellygolem.configprocess as config
-from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
 from jellygolem.jg_conversation.messagemodel import MsgPairModel
-import jellygolem.jg_emotion.emotionreactionstub as driver
 
 
 class DialogsWidget(QWidget):
@@ -92,12 +89,12 @@ class DialogsWidget(QWidget):
         self.repaint()
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    app.setStyle('Fusion')
-    font = QFont()
-    # font.setPixelSize(18)
-    app.setFont(font)
-    window = DialogsWidget()
-    window.show()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     app.setStyle('Fusion')
+#     font = QFont()
+#     # font.setPixelSize(18)
+#     app.setFont(font)
+#     window = DialogsWidget()
+#     window.show()
+#     sys.exit(app.exec_())

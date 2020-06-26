@@ -10,11 +10,13 @@
 
 '''
 
-from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
 import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
 
 
 class MsgModel:
+    '''
+    One message with corresponding emotion.
+    '''
 
     def __init__(self, emotion: tuple = (0, 0),
                  msg: str = '...'):
@@ -24,6 +26,9 @@ class MsgModel:
 
 
 class MsgPairModel:
+    '''
+    Event message & reaction message combine in one model.
+    '''
 
     def __init__(self, event_msgmodel: MsgModel = MsgModel(),
                  reaction_msgmodel: MsgModel = MsgModel()):

@@ -8,8 +8,8 @@
 
 @Function : Process emotion, change robot's emotion, output robot's display emotion.
                             +--------------------------+
-            +----------+    | inner emotion memory     |
-            |  emotion   ++   |   +-------------------+  |
+            +-------------+ | inner emotion memory     |
+            |event emotion| |   +-------------------+  |
             +----+------------->+ change inner emotion |
                  |          |   | for next loop     |  |
                  |          |   |                   |  |
@@ -17,7 +17,7 @@
                  |          |                          |
                  |          |    output current  ------------^--------------+
                  |          |    emotion state         |     |              |   +-----------------+
-                 |          +--------------------------+     |   combind    +-->+displayed emotion|
+                 |          +--------------------------+     |  combine two +-->+displayed emotion|
                  |                                           |   emotions   |   +-----------------+
                  +------------------------------------------>+--------------+
 
@@ -27,7 +27,6 @@
 import datetime
 from math import pow, log, ceil
 
-import jellygolem.configprocess as config
 import jellygolem.jg_emotion.emotionwheelprocess as wheel
 
 

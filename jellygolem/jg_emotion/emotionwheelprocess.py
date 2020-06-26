@@ -13,7 +13,7 @@
 '''
 
 from enum import Enum
-from math import pi, cos, pow, sin, atan2, sqrt
+from math import pi, cos, sin, atan2, sqrt
 
 
 class EmotionEnum(Enum):
@@ -22,7 +22,7 @@ class EmotionEnum(Enum):
     From top(the label "joy"), then clockwise.
 
     value: (radian[float] , radius[float])
-    radius range: [0,1]
+    radius range: [0,1)
     '''
 
     BLANK = (0, 0)
@@ -104,6 +104,7 @@ def calc_muti_emotions_mean(emotionlist: list):
 
     try:
         meanradius = round(sqrt(x ** 2 + y ** 2), 6)
+        # the atan2() automatically deal with problems such as 'y=0'
         meanradian = round(atan2(y, x), 6)
         check_radius(meanradius)
         return meanradian, meanradius

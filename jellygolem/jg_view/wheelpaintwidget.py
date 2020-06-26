@@ -13,12 +13,10 @@
 import sys
 
 from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtSignal, QRect
-from PyQt5.QtGui import QPixmap, QPainter, QImage
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QLabel,
-                             QSlider, QVBoxLayout, QWidget,
-                             QDoubleSpinBox, QLayout)
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtWidgets import (QApplication, QWidget)
+
 import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
 
 _RESOURCE_PATH = '../resource/'
@@ -36,6 +34,7 @@ class WheelPaintWidget(QWidget):
         self.emotion = emotion
         self.wheel_pixmap = QPixmap(_WHEEL_PIC_PATH)
         self.heart_pixmap = QPixmap(_HEART_PIC_PATH)
+        # if not so, when use this widget, it has no default space to show.
         self.setMinimumSize(self.wheel_pixmap.size())
 
     def paintEvent(self, event: QtGui.QPaintEvent):
@@ -50,9 +49,8 @@ class WheelPaintWidget(QWidget):
         self.emotion = emotion
         self.repaint()
 
-
-if __name__ == '__main__':
-    app = QApplication([])
-    ex = WheelPaintWidget((0, 0))
-    ex.show()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     app = QApplication([])
+#     ex = WheelPaintWidget()
+#     ex.show()
+#     sys.exit(app.exec_())

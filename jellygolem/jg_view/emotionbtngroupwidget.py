@@ -13,7 +13,8 @@
 '''
 
 import sys
-from PyQt5.QtCore import Qt, pyqtSignal
+
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (QApplication, QGroupBox,
                              QGridLayout, QPushButton, QButtonGroup, QLayout)
 
@@ -68,8 +69,8 @@ class EmotionButtonGroupWidget(QGroupBox):
         self.emotion_signal.emit(self.sender().emotion)
 
 
-if __name__ == '__main__':
-    app = QApplication([])
-    ex = EmotionButtonGroupWidget()
-    ex.show()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     app = QApplication([])
+#     ex = EmotionButtonGroupWidget()
+#     ex.show()
+#     sys.exit(app.exec_())

@@ -76,12 +76,12 @@ class RobotStateWidget(QWidget):
         self.repaint()
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    app.setStyle('Fusion')
-    font = QFont()
-    # font.setPixelSize(18)
-    app.setFont(font)
-    window = RobotStateWidget('tara', 20, (0, 0))
-    window.show()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     app.setStyle('Fusion')
+#     font = QFont()
+#     # font.setPixelSize(18)
+#     app.setFont(font)
+#     window = RobotStateWidget('tara', 20, (0, 0))
+#     window.show()
+#     sys.exit(app.exec_())

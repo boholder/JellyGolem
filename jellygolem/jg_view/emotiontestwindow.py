@@ -11,24 +11,19 @@
 '''
 
 import sys
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
-from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtWidgets import (QApplication, QDialog, QHBoxLayout, QLabel,
-                             QSlider, QVBoxLayout, QWidget, QMainWindow,
-                             QDoubleSpinBox, QLayout, QComboBox, QGroupBox,
-                             QGridLayout, QSizePolicy)
 
+from PyQt5.QtWidgets import (QApplication, QDialog, QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy)
+
+import jellygolem.jg_emotion.emotionreactionstub as stub
+import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
 from jellygolem.jg_conversation.messagemodel import MsgPairModel, MsgModel
+from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
+from jellygolem.jg_emotion.robotemotionmodel import RobotEmotionData
+from jellygolem.jg_emotion.robotemotionmodel import RobotEmotionModel
+from jellygolem.jg_view.dialogswidget import DialogsWidget
 from jellygolem.jg_view.emotionbtngroupwidget import EmotionButtonGroupWidget
 from jellygolem.jg_view.robotstatewidget import RobotStateWidget
 from jellygolem.jg_view.wheelpaintwidget import WheelPaintWidget
-from jellygolem.jg_view.dialogswidget import DialogsWidget
-
-import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
-from jellygolem.jg_emotion.robotemotionmodel import RobotEmotionData
-from jellygolem.jg_emotion.robotemotionmodel import RobotEmotionModel
-from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
-import jellygolem.jg_emotion.emotionreactionstub as stub
 
 
 class MainWindow(QDialog):
@@ -94,10 +89,10 @@ class MainWindow(QDialog):
             raise e
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    app.setStyle('Fusion')
-    window = MainWindow()
-    window.setWindowTitle('EmotionProcessTest')
-    window.show()
-    sys.exit(app.exec_())
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     app.setStyle('Fusion')
+#     window = MainWindow()
+#     window.setWindowTitle('EmotionProcessTest')
+#     window.show()
+#     sys.exit(app.exec_())
