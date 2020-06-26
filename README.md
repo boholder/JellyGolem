@@ -10,7 +10,7 @@ I just finished emotion processing part,
  [Robert Plutchik's 'Wheel of Emotions'](https://positivepsychology.com/emotion-wheel/).
 And I also wrote a GUI to show how this part works.
 
-## Brief intro (to design ideas)
+## Brief intro (about design ideas)
 
 The aim of this project is to implement a set of "Ghost" side functions (interaction system),
  to the existing "Ukagaka"(desktop partner) "Shell" side projects
@@ -18,15 +18,15 @@ The aim of this project is to implement a set of "Ghost" side functions (interac
  with rich and flexible animation)
  ([search results on github](https://github.com/search?q=Ukagaka&type=Repositories)).
 
-The core function of this project is the implementation of an "event-driven conversation function".
+The core function of this project, is the implementation of an "event-driven conversation function".
 Using event-trigger-based rather than user-input-keyword
- to trigger dialogs avoids the necessity to write keyword system
+ to trigger dialogs, avoids the necessity to write keyword system
  with never-having-enough keyword-response pairs.
 Some responses apply to many events, such as perfunctory and ambiguous responses.
-I just need to query in the database for responses
+I just need to query in the database for responses,
  that match both the corresponding event label and the corresponding reaction emotion label.
 Also, because this response design loses user initiative,
- I need to ensure that it will not activated unnecessarily to avoid disturbing the user.
+ I need to ensure that it will not activated unnecessarily, to avoid disturbing the user.
 
 This project still counts as an entertaining game
  rather than a development library.
