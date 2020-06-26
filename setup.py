@@ -9,7 +9,7 @@ setup(
     url='https://github.com/boholder/JellyGolem',
     author='boholder',
     author_email='boholder@anche.no',
-    description='A chat bot with virtual emotionally oriented responses.',
+    description='A chat bot with simulated emotionally oriented responses.',
     classifiers=['Programming Language :: Python :: 3',
                  'License :: OSI Approved :: MIT License',
                  'Intended Audience :: Other Audience',
