@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-@File : emotionreactionstub.py
+@File : reactionstub.py
 
 @Time : 2020/6/24
 

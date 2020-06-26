@@ -12,4 +12,5 @@ A chat bot with virtual emotionally oriented responses.
 
 ## Credits
 
-* Icon prototype made by [Freepik from www.flaticon.com](https://www.flaticon.com/free-icon/jelly_184579)
+* Icon prototype made by 
+[Freepik from www.flaticon.com](https://www.flaticon.com/free-icon/jelly_184579)

@@ -120,8 +120,7 @@ class RobotEmotionModel:
         self.emotion = wheel.calc_muti_emotions_mean(
             [(in_emotion[0], in_emotion[1] * self.iescale), old_emotion])
 
-        # displayed emotion = immediate emotion + internal emotion
+        # displayed emotion = mean(immediate emotion * r-e-scale, internal emotion)
         return wheel.calc_muti_emotions_mean(
             [(in_emotion[0], in_emotion[1] * self.rescale),
-             (old_emotion[0], old_emotion[1] * (1 - self.rescale))
-             ])
+             old_emotion])

@@ -14,7 +14,7 @@ import sys
 
 from PyQt5.QtWidgets import (QApplication, QDialog, QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy)
 
-import jellygolem.jg_emotion.emotionreactionstub as stub
+import jellygolem.jg_emotion.reactionstub as stub
 import jellygolem.jg_emotion.emotionwheelprocess as emotionproc
 from jellygolem.jg_conversation.messagemodel import MsgPairModel, MsgModel
 from jellygolem.jg_emotion.emotionwheelprocess import EmotionEnum
@@ -89,10 +89,10 @@ class MainWindow(QDialog):
             raise e
 
 
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     app.setStyle('Fusion')
-#     window = MainWindow()
-#     window.setWindowTitle('EmotionProcessTest')
-#     window.show()
-#     sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    app.setStyle('Fusion')
+    window = MainWindow()
+    window.setWindowTitle('EmotionProcessTest')
+    window.show()
+    sys.exit(app.exec_())
